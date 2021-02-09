@@ -20,6 +20,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import br.com.digamo.pontoeletronico.api.model.enums.PerfilEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -75,11 +78,12 @@ public class Funcionario {
 	@Column(name = "perfil", nullable = false)
 	private PerfilEnum perfil;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	private Empresa empresa;
 	
-	@OneToMany(mappedBy = "Funcionario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Lancamento> lancamento;
+	@OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Lancamento> lancamentos;
 	
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDateTime dataCriacao;
@@ -103,7 +107,7 @@ public class Funcionario {
 	public String toString() {
 		return "Funcionario [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", cpf=" + cpf
 				+ ", valorHora=" + valorHora + ", qtdHorasTrabalhoDia=" + qtdHorasTrabalhoDia + ", qtdHorasAlmoco="
-				+ qtdHorasAlmoco + ", perfil=" + perfil + ", empresa=" + empresa + ", lancamento=" + lancamento
+				+ qtdHorasAlmoco + ", perfil=" + perfil + ", empresa=" + empresa + ", lancamento=" + lancamentos
 				+ ", dataCriacao=" + dataCriacao + ", dataAtualizacao=" + dataAtualizacao + "]";
 	}
 	
